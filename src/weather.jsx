@@ -26,12 +26,10 @@ export const Weather = () => {
       try {
         const response = await fetch(api);
         if (!response.ok) throw new Error('Failed to fetch weather');
-        console.log(response)
         const data = await response.json();
         setResponse(!false);
         setWeather(data);
       } catch (error) {
-        console.log(error)
         setResponse(!true);
       }
     }
