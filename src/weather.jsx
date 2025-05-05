@@ -56,41 +56,41 @@ export const Weather = () => {
           <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`} />
         )}
         <div>
-        {weather?.main?.temp && weather.main.temp.length > 0 && (
-          <span className="text-white">{weather?.main?.temp}</span>
-        )}
-        {weather?.main && weather?.wind && (
-          <ul className="bg-[#1e1e1e]">
-            <li>
-              <FaTemperatureFull color="white" size={25}/>
-              <div>
-                <span className="text-white">Feels Like</span>
-                <span className="text-white">{weather?.main?.feels_like}</span>
-              </div>
-            </li>
-            <li>
-              <WiHumidity color="white" size={25}/>
-              <div>
-                <span className="text-white">Humidity</span>
-                <span className="text-white">{weather?.main?.humidity}</span>
-              </div>
-            </li>
-            <li>
-              <FaWind color="white" size={25}/>
-              <div>
-                <span className="text-white">Wind</span>
-                <span className="text-white">{weather?.wind?.speed}</span>
-              </div>
-            </li>
-            <li>
-              <div>
-                <AiFillDashboard color="white" size={25}/>
-                <span className="text-white">pressure</span>
-                <span className="text-white">{weather?.main?.pressure}</span>
-              </div>
-            </li>
-          </ul>
-        )}
+          {weather?.main?.temp && weather.main.temp.length > 0 && (
+            <span className="text-white">{weather?.main?.temp}</span>
+          )}
+          {weather?.main && weather?.wind && (
+            <ul className="bg-[#1e1e1e]">
+              <li>
+                <FaTemperatureFull color="white" size={25}/>
+                <div>
+                  <span className="text-white">Feels Like</span>
+                  <span className="text-white">{weather?.main?.feels_like}</span>
+                </div>
+              </li>
+              <li>
+                <WiHumidity color="white" size={25}/>
+                <div>
+                  <span className="text-white">Humidity</span>
+                  <span className="text-white">{weather?.main?.humidity}</span>
+                </div>
+              </li>
+              <li>
+                <FaWind color="white" size={25}/>
+                <div>
+                  <span className="text-white">Wind</span>
+                  <span className="text-white">{weather?.wind?.speed}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <AiFillDashboard color="white" size={25}/>
+                  <span className="text-white">pressure</span>
+                  <span className="text-white">{weather?.main?.pressure}</span>
+                </div>
+              </li>
+            </ul>
+          )}
         </div>
       </div>
     </div>
