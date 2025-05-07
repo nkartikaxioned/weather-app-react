@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input"
 
-export const WeatherInput = ({stateValue, setStateValue}) => {
+export const WeatherInput = ({stateValue, setStateValue, placeholder, className}) => {
 
   const handleInput = (value) => {
     setStateValue(value);
@@ -10,6 +10,8 @@ export const WeatherInput = ({stateValue, setStateValue}) => {
     <Input 
       value = {stateValue}
       onChange = {(e) => {handleInput(e.target.value)}}
+      placeholder = {placeholder}
+      className = {className}
     />
  );
 }

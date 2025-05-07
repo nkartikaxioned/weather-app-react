@@ -4,7 +4,7 @@ import { GoSearch } from "react-icons/go";
 import { ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FaTemperatureFull } from "react-icons/fa6";
-import { WiHumidity } from "react-icons/wi";
+import { MdWaterDrop } from "react-icons/md";
 import { FaWind } from "react-icons/fa6";
 import { AiFillDashboard } from "react-icons/ai";
 
@@ -13,6 +13,7 @@ export const Weather = () => {
 
   const [stateValue, setStateValue] = useState("");
   const [weather, setWeather] = useState("");
+  const [unit, setUnit] = useState("metric");
   const [response, setResponse] = useState(false)
 
   const handleSubmit = async(e) => {
@@ -21,7 +22,8 @@ export const Weather = () => {
     if(stateValue) {
       const city = stateValue;
       const key = "c33ecddffd96e7dc6aa94c5e89e44aa1";
-      const api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`;
+      const units = unit;
+      const api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=${units}`;
       setStateValue("");
       try {
         const response = await fetch(api);
@@ -35,70 +37,131 @@ export const Weather = () => {
     }
   }
 
+  const handleClickCelsius = (e) => {
+    setUnit("metric");
+    handleSubmit(e);
+  }
+
+  const handleClickFarenheit = (e) => {
+    setUnit("imperial");
+    handleSubmit(e);
+  }
+
   return (
-    <div className="bg-black">
-      <form 
-        className="flex flex-row bg-[#1e1e1e] items-center" 
-        onSubmit={(e) => handleSubmit(e)}>
-        <GoSearch color="white" size={24}/>
-        <WeatherInput 
-          stateValue = {stateValue}
-          setStateValue = {setStateValue}
-        />
-        <Button type="submit" variant="outline" size="icon">
-          <ChevronRight />
-        </Button>
-      </form>
-      {response !== false &&  
-        <div>
-          {weather?.weather && weather.sys.country.length > 0 && (
-            <h1 className="text-white">{weather?.name}, {weather?.sys?.country}</h1>
-          )}
-          {weather?.weather && weather.weather.length > 0 && (
-            <span className="text-white">{weather.weather[0].main}</span>
-          )}
-          {weather?.weather && weather.weather.length > 0 && (
-            <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`} />
-          )}
-          <div>
-            {weather?.main?.temp && weather.main.temp.length > 0 && (
-              <span className="text-white">{weather?.main?.temp}</span>
-            )}
-            {weather?.main && weather?.wind && (
-              <ul className="bg-[#1e1e1e]">
-                <li>
-                  <FaTemperatureFull color="white" size={25}/>
-                  <div>
-                    <span className="text-white">Feels Like</span>
-                    <span className="text-white">{weather?.main?.feels_like}</span>
-                  </div>
-                </li>
-                <li>
-                  <WiHumidity color="white" size={25}/>
-                  <div>
-                    <span className="text-white">Humidity</span>
-                    <span className="text-white">{weather?.main?.humidity}</span>
-                  </div>
-                </li>
-                <li>
-                  <FaWind color="white" size={25}/>
-                  <div>
-                    <span className="text-white">Wind</span>
-                    <span className="text-white">{weather?.wind?.speed}</span>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <AiFillDashboard color="white" size={25}/>
-                    <span className="text-white">pressure</span>
-                    <span className="text-white">{weather?.main?.pressure}</span>
-                  </div>
-                </li>
-              </ul>
-            )}
+    <div className="flex justify-center items-center h-full">
+      <div className="bg-black w-(--percentage-40) rounded-(--10) p-6">
+        <div className="flex  justify-between">
+          <form 
+            className="flex flex-row bg-(--light-gray) rounded-(--10) items-center pl-2 w-(--percentage-50)" 
+            onSubmit={(e) => handleSubmit(e)}>
+            <GoSearch color="white" size={24}/>
+            <WeatherInput 
+              stateValue = {stateValue}
+              setStateValue = {setStateValue}
+              placeholder = "Search for a City..."
+              className = "w-(--percentage-82) placeholder:text-white"
+            />
+            <Button type="submit" variant="outline" size="icon">
+              <ChevronRight />
+            </Button>
+          </form>
+          <div className="weather__units">
+            <span className="weather_unit_celsius text-white" onClick={(e) => {handleClickCelsius(e)}}>°C</span>
+            <span className="weather_unit_farenheit text-white" onClick={(e) => {handleClickFarenheit(e)}}>°F</span>
           </div>
         </div>
-      }
+        {response !== false &&  
+          <div 
+            className="bg-black flex justify-center flex-col items-center mt-16">
+            {weather?.weather && weather.sys.country.length > 0 && (
+              <h1 
+                className="text-white">
+                  {weather?.name}, {weather?.sys?.country}
+                </h1>
+            )}
+            {weather?.weather && weather.weather.length > 0 && (
+              <span 
+                className="text-white py-2 px-2.5 bg-(--light-gray) rounded-2xl mt-7">
+                  {weather.weather[0].main}
+                </span>
+            )}
+            {weather?.weather && weather.weather.length > 0 && (
+              <figure className="h-[150px] w-[150px]">
+                <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`} />
+              </figure>
+            )}
+            <div className="w-full">
+              {weather?.main?.temp && (
+                <h2 
+                  className="text-white text-center">
+                  {weather?.main?.temp}°
+                </h2>
+              )}
+              {weather?.main?.temp_max && weather?.main?.temp_min && (
+                <div className="text-center mt-3">
+                  <span className="text-white">
+                    Min: {weather?.main?.temp_min}°
+                  </span>
+                  <span className="text-white ml-4">
+                    Max: {weather?.main?.temp_max}°
+                  </span>
+                </div>
+              )}
+              {weather?.main && weather?.wind && (
+                <ul 
+                  className="flex flex-wrap rounded-2xl gap-5 mt-12">
+                  <li 
+                    className="bg-(--light-gray) rounded-(--8) p-5 basis-(--percentage-48) flex items-center">
+                    <FaTemperatureFull 
+                      color="white" 
+                      size={25}
+                    />
+                    <div className="ml-3">
+                      <span className="text-white block">Feels Like</span>
+                      <span className="text-white block">{weather?.main?.feels_like}°</span>
+                    </div>
+                  </li>
+                  <li 
+                    className="bg-(--light-gray) rounded-(--8) p-5 basis-(--percentage-48) flex items-center">
+                    <MdWaterDrop 
+                      color="white" 
+                      size={25}
+                    />
+                    <div className="ml-3">
+                      <span className="text-white block">Humidity</span>
+                      <span className="text-white block">{weather?.main?.humidity}%</span>
+                    </div>
+                  </li>
+                  <li 
+                    className="bg-(--light-gray) rounded-(--8) p-5 basis-(--percentage-48) flex items-center">
+                    <FaWind 
+                      color="white" 
+                      size={25}
+                    />
+                    <div className="ml-3">
+                      <span className="text-white block">Wind</span>
+                      <span className="text-white block">
+                        {weather?.wind?.speed} {unit == "metric" ? "m/s" : "mph" }
+                      </span>
+                    </div>
+                  </li>
+                  <li 
+                    className="bg-(--light-gray) rounded-(--8) p-5 basis-(--percentage-48) flex items-center">
+                    <AiFillDashboard 
+                      color="white" 
+                      size={25}
+                    />
+                    <div className="ml-3">
+                      <span className="text-white block">pressure</span>
+                      <span className="text-white block">{weather?.main?.pressure} hPa</span>
+                    </div>
+                  </li>
+                </ul>
+              )}
+            </div>
+          </div>
+        }
+      </div>
     </div>
   )
 }
